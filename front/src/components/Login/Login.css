@@ -1,0 +1,21 @@
+.Login{
+    width: 541px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 5px #bcd0db;
+    border-radius: 10px;
+    padding: 3em;
+}
+
+.label_container{
+    display: flex;
+    justify-content: space-between;
+    padding-right: .5em;
+}
+.label_container * {
+    font-size: .85em;
+}
+.label_container label{
+    font-weight: bold;
+}

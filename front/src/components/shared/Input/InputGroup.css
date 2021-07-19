@@ -1,0 +1,20 @@
+.InputGroup__input-box{
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    box-shadow: 1px 1px 5px var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 1.5em;
+    color: var(--border-color);
+    font-size: .85em;
+    margin-bottom: 1.5em;
+    margin-top: .75em;
+}
+
+.InputGroup__input-box input{
+    border: none;
+    outline: none;
+    width: 100%;
+    margin-left: .5em;
+}
