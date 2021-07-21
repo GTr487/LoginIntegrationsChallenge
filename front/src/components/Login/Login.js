@@ -4,10 +4,14 @@ import './Login.css';
 import { Logo } from '../shared/Logo/Logo';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import Separator from '../shared/Separator/Separator';
-// import Button, { ButtonTypes} from '../shared/Button/Button';
+import * as authService from '../../services/auth.service';
+import { useState } from 'react';
 
 
 function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     return(
         <div className="Login">
             <Container>
@@ -46,11 +50,11 @@ function Login() {
                     <Col>
                         <div>
                             <div className="label_container">
-                                <label for="input_email">Email Address</label>
+                                <label htmlFor="input_email">Email Address</label>
                             </div>
                             <InputGroup>
                                 <FaAt />
-                                <input id="input_email" type="text"></input>
+                                <input id="input_email" type="text" value={email} onChange={ e => setEmail(e.target.value)}></input>
                             </InputGroup>
                         </div>
                     </Col>
@@ -59,12 +63,12 @@ function Login() {
                     <Col>
                         <div>
                             <div className="label_container">
-                                <label for="input_password">Password</label>
+                                <label htmlFor="input_password">Password</label>
                                 <a href="/">Forgot Password?</a>
                             </div>
                             <InputGroup>
                                 <FaLock />
-                                <input id="input_password" type="password"></input>
+                                <input id="input_password" type="password" value={password} onChange={e => setPassword(e.target.value)}></input>
                             </InputGroup>
                         </div>
                     </Col>
@@ -74,12 +78,19 @@ function Login() {
                         <p className="align-self-center">Don't have an account? <a href="/">Sign up now</a></p>
                     </Col>
                     <Col xs="4" className="flex-column">
-                        <Button type="submit">Sign In</Button>
+                        <Button type="submit" onClick={ _ => { signIn(email, password) } }>Sign In</Button>
                     </Col>
                 </Row>
             </Container>
         </div>
     )
+}
+
+function signIn(email, password) {
+    authService.signin(email, password)
+    .then(r => {
+        authService.login().then(r => console.log("LOG", r))
+    });
 }
 
 export default Login;
