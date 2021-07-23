@@ -100,3 +100,7 @@ code {
 .btn-secondary {
   background-color: var(--bg-s-color);
 }
+
+.btn-secondary:visited{
+  color: #FFFFFF;
+}

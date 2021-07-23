@@ -9,3 +9,8 @@
 .label_container label{
     font-weight: bold;
 }
+.imput_error{
+    color: red;
+    font-size: .75em;
+    padding-left: 1em;
+}
