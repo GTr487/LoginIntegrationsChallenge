@@ -2,6 +2,14 @@ const baseUrl = '/auth';
 
 export var authenticationToken;
 
+export function config() {
+    return fetch(`${baseUrl}/config`, {
+        method: 'GET',
+        credentials: 'include',
+    })
+    .then(res => res.json() );
+} 
+
 export function signin(email, password) {
     return fetch(`${baseUrl}/signin`, {
         method: 'POST',
@@ -33,11 +41,3 @@ export function signout() {
         })
     );
 }
-
-export function login() {
-    return fetch(`${baseUrl}/login`, {
-        method: 'GET',
-        credentials: 'include',
-    })
-    .then(res => res.json() );
-} 

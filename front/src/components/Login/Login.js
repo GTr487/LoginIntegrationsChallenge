@@ -5,11 +5,9 @@ import { Logo } from '../shared/Logo/Logo';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import Separator from '../shared/Separator/Separator';
 import * as authService from '../../services/auth.service';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const GitHubClientID = "Iv1.04f31e5892778339"
 const GitHubOAuthRedirectUrl = "http://localhost:8080/auth/github/redirect"
-const GmailClientID = "659858633917-1u99n59etga0f8g18455vlpg08g07unb.apps.googleusercontent.com"
 const GmailOAuthRedirectUrl = "http://localhost:8080/auth/gmail/redirect"
 
 function Login(props) {
@@ -18,6 +16,20 @@ function Login(props) {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [authError, setAuthError] = useState("");
+
+    const [githubClientID, setGithubClientID] = useState("");
+    const [gmailClientID, setGmailClientID] = useState("");
+
+    useEffect(() => {
+        if(!githubClientID || !gmailClientID){
+            authService.config().then(res => {
+                if(res) {
+                    setGithubClientID(res.gihub_client_id);
+                    setGmailClientID(res.gmail_client_id);
+                }
+              });
+        }
+      })
 
     return(
         <div className="Login box">
@@ -35,7 +47,7 @@ function Login(props) {
                 <Row  className="mt-1">
                     <Col className="flex-column">
                         <Button 
-                            href={`https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GmailOAuthRedirectUrl}&prompt=consent&response_type=code&client_id=${GmailClientID}&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline`}
+                            href={`https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GmailOAuthRedirectUrl}&prompt=consent&response_type=code&client_id=${gmailClientID}&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline`}
                             variant="secondary">
                                 Sign in with Gmail
                         </Button>
@@ -44,7 +56,7 @@ function Login(props) {
                 <Row className="mt-3">
                     <Col className="flex-column">
                         <Button 
-                            href={`https://github.com/login/oauth/authorize?client_id=${GitHubClientID}&redirect_uri=${GitHubOAuthRedirectUrl}`}
+                            href={`https://github.com/login/oauth/authorize?client_id=${githubClientID}&redirect_uri=${GitHubOAuthRedirectUrl}`}
                             variant="secondary">
                                 Sign in with GitHub
                         </Button>

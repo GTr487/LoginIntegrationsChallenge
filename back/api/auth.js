@@ -13,6 +13,18 @@ const [db, type] = require('../database/database').get({
 const router = express.Router();
 
 router
+    .get('/config', async (req, res) => {
+        try{
+            res.json({
+                gihub_client_id: config.auth.github.clientId,
+                gmail_client_id: config.auth.gmail.clientId,
+            })
+        } catch(err) {
+            console.log(err);
+            res.status(500).end();
+        }
+    })
+
     .post('/signin', async (req, res) => {
         try{
             let { email, password } = req.body;
