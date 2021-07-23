@@ -7,13 +7,15 @@ import Separator from '../shared/Separator/Separator';
 import * as authService from '../../services/auth.service';
 import { useState } from 'react';
 
+const GitHubClientID = "Iv1.04f31e5892778339"
+const OAuthRedirectUrl = "http://localhost:8080/auth/github/redirect"
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     return(
-        <div className="Login">
+        <div className="Login box">
             <Container>
                 <Row>
                     <Col>
@@ -36,8 +38,9 @@ function Login() {
                 <Row className="mt-3">
                     <Col className="flex-column">
                         <Button 
+                            href={`https://github.com/login/oauth/authorize?client_id=${GitHubClientID}&redirect_uri=${OAuthRedirectUrl}`}
                             variant="secondary">
-                                Sign in with Facebook
+                                Sign in with GitHub
                         </Button>
                     </Col>
                 </Row>
@@ -84,13 +87,14 @@ function Login() {
             </Container>
         </div>
     )
+
+    function signIn(email, password) {
+        authService.signin(email, password)
+        .then(r => {
+            props.onChange(true);
+        });
+    }
 }
 
-function signIn(email, password) {
-    authService.signin(email, password)
-    .then(r => {
-        authService.login().then(r => console.log("LOG", r))
-    });
-}
 
 export default Login;
