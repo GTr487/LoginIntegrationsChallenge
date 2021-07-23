@@ -20,6 +20,10 @@ module.exports = {
         github: {
             clientId: env.GITHUB_CLIENT_ID,
             clientSecret: env.GITHUB_CLIENT_SECRET
+        },
+        gmail: {
+            clientId: env.GMAIL_CLIENT_ID,
+            clientSecret: env.GMAIL_CLIENT_SECRET
         }
     }
 }

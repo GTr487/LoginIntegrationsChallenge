@@ -148,6 +148,57 @@ router
         }
     })
 
+    .get('/gmail/redirect', async (req, res) => {
+        try{
+            let code = req.query.code;
+            const redirect_uri = encodeURIComponent("http://localhost:8080/auth/gmail/redirect");
+            let accessToken;
+            let email;
+
+            await axios({
+                method: 'post',
+                url: `https://oauth2.googleapis.com/token`,
+                data: `code=${code}&client_id=${config.auth.gmail.clientId}&client_secret=${config.auth.gmail.clientSecret}&redirect_uri=${redirect_uri}&grant_type=authorization_code&`,
+                headers: {
+                    accept: 'application/json'
+                }
+            })
+            .then(tokenResponse => {
+                if(tokenResponse) accessToken = tokenResponse.data.access_token;
+            })
+            .catch(err => console.log("ERR", err));
+        
+            await axios({
+                method: 'get',
+                url: `https://www.googleapis.com/oauth2/v2/userinfo`,
+                headers: {
+                    Accept: "application/vnd.github.v3+json",
+                    Authorization: 'Bearer ' + accessToken
+                }
+            })
+            .then(userResponse => userResponse.data)
+            .then(userResponse => {
+                if(userResponse) email = userResponse.email;
+            })
+
+            let user = await db.existUser(email);
+            if(!user) await db.addUser(email, Math.random());
+
+            let refreshToken = generateAccessToken(email, config.auth.jwtRefreshSecret);
+
+            await db.setRefreshToken(email, refreshToken);
+    
+            res.cookie("refresh_token", refreshToken, { 
+                maxAge: config.auth.jwtExpirySecond * 1000, 
+                httpOnly: true,
+            })
+            res.redirect('http://localhost:3000/');
+        } catch(err) {
+            console.log(err);
+            res.status(500).end();
+        }
+    })
+
 
 function generateAccessToken(email, secret) {
     return jwt.sign({ email }, secret, {
